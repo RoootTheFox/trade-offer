@@ -32,7 +32,7 @@ public class TradeOfferMeow {
     private static final int TEXT_COLOR = 0xFFFFFF;
     private static final int TRIANGLE_COLOR = 0xFFFF00;
 
-    public static void renderStupidMeme(final DrawContext ctx, final TextRenderer renderer, final int backgroundWidth) {
+    public static void hotDemonTwinksInHell(final DrawContext ctx, final TextRenderer renderer, final int backgroundWidth) {
         final int tradeOfferWidth = renderer.getWidth(TRADE_OFFER_TXT);
         final int tradeOfferX = TRADE_OFFER_X + (backgroundWidth / 2) - (tradeOfferWidth / 2);
         final int triangleWidth = renderer.getWidth(TRIANGLE_TXT);
