@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static gay.rooot.tradeoffer.TradeOfferMeow.TRADE_OFFER_TXT;
+import static gay.rooot.tradeoffer.TradeOfferMeow.TRADE_OFFER_TEXT;
 
 @Mixin(MerchantScreen.class)
 public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHandler> {
@@ -48,7 +48,7 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/text/Text;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/text/MutableText;"), method = "drawForeground")
     public MutableText drawForeground_translatable(final String key, final Object[] args) {
-        return isTradingRightMeow ? TRADE_OFFER_TXT : Text.translatable(key, args);
+        return isTradingRightMeow ? TRADE_OFFER_TEXT : Text.translatable(key, args);
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I", ordinal = 0), method = "drawForeground")
@@ -66,5 +66,4 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
             TradeOfferMeow.hotDemonTwinksInHell(context, this.textRenderer, this.backgroundWidth);
         }
     }
-
 }
