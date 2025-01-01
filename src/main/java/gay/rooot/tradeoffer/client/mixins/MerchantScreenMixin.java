@@ -63,7 +63,7 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
     @Inject(at = @At("HEAD"), method = "drawForeground")
     public void drawForeground(final DrawContext context, final int mouseX, final int mouseY, final CallbackInfo ci) {
         if (isTradingRightMeow) {
-            TradeOfferMeow.renderStupidMeme(context, this.textRenderer, this.backgroundWidth);
+            TradeOfferMeow.hotDemonTwinksInHell(context, this.textRenderer, this.backgroundWidth);
         }
     }
 

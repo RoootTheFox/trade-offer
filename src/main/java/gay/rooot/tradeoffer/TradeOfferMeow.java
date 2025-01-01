@@ -5,7 +5,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-@SuppressWarnings("SameParameterValue") // Rope.
 public class TradeOfferMeow {
 
     // text stuff
@@ -54,6 +53,7 @@ public class TradeOfferMeow {
         ctx.drawText(renderer, TRIANGLE_TXT, tradeOfferX + tradeOfferWidth + TRIANGLE_PADDING + 1, TRIANGLE_Y, TRIANGLE_COLOR, false);
     }
 
+    @SuppressWarnings("SameParameterValue") // yOffset and color gives a warning which we can just...suppress because it's a helper function
     private static void drawCenterText(final DrawContext ctx, final TextRenderer renderer, final Text text, final int xOffset, final int yOffset, final int backgroundWidth, final int color) {
         ctx.drawTextWithShadow(
                 renderer,
