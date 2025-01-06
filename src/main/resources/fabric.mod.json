@@ -11,6 +11,7 @@
       "homepage": "rooot.gay"
     }
   }],
+  "icon": "assets/tradeoffer/icon.png",
   "contact": {},
   "license": "WTFPL",
   "environment": "client",
