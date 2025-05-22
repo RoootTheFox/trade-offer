@@ -6,6 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -31,14 +32,13 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
 
     @Inject(at = @At("HEAD"), method = "render")
     public void render(final DrawContext context, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
-        if (this.handler.slots.size() < 2) {
-            // what the f-
+        if (this.handler.slots.size() < 3) {
             isTradingRightMeow = false;
             return;
         }
 
-        // slot index 2 is always the output slot
-        isTradingRightMeow = !this.handler.slots.get(2).getStack().getTranslationKey().equals("block.minecraft.air");
+        ItemStack stack = this.handler.slots.get(2).getStack();
+        isTradingRightMeow = !stack.isEmpty() && !stack.getItem().getTranslationKey().equals("block.minecraft.air");
     }
 
     @Inject(at = @At("HEAD"), method = "drawLevelInfo", cancellable = true)
