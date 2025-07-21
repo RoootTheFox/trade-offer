@@ -51,13 +51,13 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
         return isTradingRightMeow ? TRADE_OFFER_TEXT : Text.translatable(key, args);
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I", ordinal = 0), method = "drawForeground")
-    public int drawText_translatable(final DrawContext ctx, final TextRenderer textRenderer, final Text text, final int x, final int y, int color, final boolean shadow) {
-        if (color == 0x404040 && isTradingRightMeow) {
-            color = 0xffffff;
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)V", ordinal = 0), method = "drawForeground")
+    public void drawText_translatable(final DrawContext ctx, final TextRenderer textRenderer, final Text text, final int x, final int y, int color, final boolean shadow) {
+        if (color == 0xff404040 && isTradingRightMeow) {
+            color = 0xffffffff;
         }
 
-        return ctx.drawText(textRenderer, text, x, y, color, shadow);
+        ctx.drawText(textRenderer, text, x, y, color, shadow);
     }
 
     @Inject(at = @At("HEAD"), method = "drawForeground")
