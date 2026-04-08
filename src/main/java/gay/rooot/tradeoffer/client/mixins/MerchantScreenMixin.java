@@ -1,16 +1,17 @@
 package gay.rooot.tradeoffer.client.mixins;
 
 import gay.rooot.tradeoffer.TradeOfferMeow;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.ingame.MerchantScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.MerchantScreenHandler;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.village.TradeOffer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MerchantScreen;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MerchantMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,49 +22,49 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static gay.rooot.tradeoffer.TradeOfferMeow.TRADE_OFFER_TEXT;
 
 @Mixin(MerchantScreen.class)
-public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHandler> {
+public abstract class MerchantScreenMixin extends AbstractContainerScreen<MerchantMenu> {
 
     @Unique
     private boolean isTradingRightMeow = false;
 
-    public MerchantScreenMixin(MerchantScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
+    public MerchantScreenMixin(MerchantMenu menu, Inventory inventory, Component title) {
+        super(menu, inventory, title);
     }
 
-    @Inject(at = @At("HEAD"), method = "renderMain")
-    public void renderMain(final DrawContext context, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
-        if (this.handler.slots.size() < 3) {
+    @Inject(at = @At("HEAD"), method = "extractContents")
+    public void renderMain(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
+        if (this.menu.slots.size() < 3) {
             isTradingRightMeow = false;
             return;
         }
 
-        ItemStack stack = this.handler.slots.get(2).getStack();
-        isTradingRightMeow = !stack.isEmpty() && !stack.getItem().getTranslationKey().equals("block.minecraft.air");
+        ItemStack stack = this.menu.slots.get(2).getItem();
+        isTradingRightMeow = !stack.isEmpty() && !stack.getItem().getDescriptionId().equals("block.minecraft.air");
     }
 
-    @Inject(at = @At("HEAD"), method = "drawLevelInfo", cancellable = true)
-    public void drawLevelInfo(final DrawContext context, final int x, final int y, final TradeOffer tradeOffer, final CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "extractProgressBar", cancellable = true)
+    public void drawLevelInfo(GuiGraphicsExtractor graphics, int xo, int yo, MerchantOffer offer, CallbackInfo ci) {
         if (isTradingRightMeow) ci.cancel();
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/text/Text;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/text/MutableText;"), method = "drawForeground")
-    public MutableText drawForeground_translatable(final String key, final Object[] args) {
-        return isTradingRightMeow ? TRADE_OFFER_TEXT : Text.translatable(key, args);
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;"), method = "extractLabels")
+    public MutableComponent drawForeground_translatable(final String key, final Object[] args) {
+        return isTradingRightMeow ? TRADE_OFFER_TEXT : Component.translatable(key, args);
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)V", ordinal = 0), method = "drawForeground")
-    public void drawText_translatable(final DrawContext ctx, final TextRenderer textRenderer, final Text text, final int x, final int y, int color, final boolean shadow) {
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V", ordinal = 0), method = "extractLabels")
+    public void drawText_translatable(GuiGraphicsExtractor graphics, Font font, Component str, int x, int y, int color, boolean dropShadow) {
         if (color == 0xff404040 && isTradingRightMeow) {
             color = 0xffffffff;
         }
 
-        ctx.drawText(textRenderer, text, x, y, color, shadow);
+        graphics.text(font, str, x, y, color, dropShadow);
     }
 
-    @Inject(at = @At("HEAD"), method = "drawForeground")
-    public void drawForeground(final DrawContext context, final int mouseX, final int mouseY, final CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "extractLabels")
+    public void extractLabels(GuiGraphicsExtractor graphics, int xm, int ym, CallbackInfo ci) {
         if (isTradingRightMeow) {
-            TradeOfferMeow.hotDemonTwinksInHell(context, this.textRenderer, this.backgroundWidth);
+            TradeOfferMeow.hotDemonTwinksInHell(graphics, this.font, this.imageWidth /* todo ?? */);
         }
     }
 }
