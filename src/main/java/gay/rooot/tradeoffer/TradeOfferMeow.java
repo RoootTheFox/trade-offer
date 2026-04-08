@@ -22,8 +22,8 @@ public class TradeOfferMeow {
     private static final int BACKGROUND_PADDING = 3;
 
     private static final int BACKGROUND_COLOR = 0xffe13d3b;
-    private static final int TEXT_COLOR = 0xffffff;
-    private static final int TRIANGLE_COLOR = 0xffff00;
+    private static final int TEXT_COLOR = 0xffffffff;
+    private static final int TRIANGLE_COLOR = 0xffffff00;
 
     public static void hotDemonTwinksInHell(final DrawContext ctx, final TextRenderer renderer, final int backgroundWidth) {
         int tradeOfferWidth = renderer.getWidth(TRADE_OFFER_TEXT);

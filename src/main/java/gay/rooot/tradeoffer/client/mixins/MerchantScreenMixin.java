@@ -30,8 +30,8 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
         super(handler, inventory, title);
     }
 
-    @Inject(at = @At("HEAD"), method = "render")
-    public void render(final DrawContext context, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "renderMain")
+    public void renderMain(final DrawContext context, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
         if (this.handler.slots.size() < 3) {
             isTradingRightMeow = false;
             return;
